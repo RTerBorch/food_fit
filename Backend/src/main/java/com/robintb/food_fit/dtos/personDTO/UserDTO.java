@@ -4,21 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonDTO {
+@Data
+public class UserDTO {
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
-    private double weight;
-    private int age;
 
-    public PersonDTO(String name, String email, double weight, int age) {
-        this.name = name;
+    public UserDTO(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.weight = weight;
-        this.age = age;
     }
 
 }
