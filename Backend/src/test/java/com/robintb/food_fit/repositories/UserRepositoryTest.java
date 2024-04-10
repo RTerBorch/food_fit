@@ -16,7 +16,7 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User createPerson(String username, String firstName, String lastName, char[] password, String email) {
+    private User createPerson(String username, String firstName, String lastName, String password, String email) {
         User user = new User(username, firstName,lastName, password, email);
         user.setUsername(username);
         user.setFirstName(firstName);
@@ -33,7 +33,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testSavePerson(){
-        User savedUser = userRepository.save(new User("user","John","Doe", "password".toCharArray(),"john@example.com"));
+        User savedUser = userRepository.save(new User("user","John","Doe", "password","john@example.com"));
 
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getUsername()).isEqualTo("user");
@@ -45,7 +45,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUsername() {
-        createPerson("user", "John", "Doe", "password".toCharArray(), "john@example.com");
+        createPerson("user", "John", "Doe", "password", "john@example.com");
 
         User foundUser = userRepository.findByUsername("user").orElseThrow(() -> new IllegalArgumentException("Person not found"));
 
@@ -53,12 +53,12 @@ public class UserRepositoryTest {
         assertThat(foundUser.getFirstName()).isEqualTo("John");
         assertThat(foundUser.getLastName()).isEqualTo("Doe");
         assertThat(foundUser.getEmail()).isEqualTo("john@example.com");
-        assertThat(foundUser.getPassword()).isEqualTo("password".toCharArray());
+        assertThat(foundUser.getPassword()).isEqualTo("password");
     }
 
     @Test
     public void testDeletePerson() {
-        User savedUser = createPerson("user","John","Doe", "password".toCharArray(), "john@example.com");
+        User savedUser = createPerson("user","John","Doe", "password", "john@example.com");
 
         // before delete
         Optional<User> beforeDeleteUser = userRepository.findByUsername("user");

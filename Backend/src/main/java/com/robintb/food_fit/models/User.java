@@ -28,12 +28,12 @@ public class User {
     private String lastName;
 
     @Column(nullable = false)
-    private char[] password;
+    private String password;
 
     @Column(nullable = false)
     private String email;
 
-    public User(String username, String firstName, String lastName, char[] password, String email) {
+    public User(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;

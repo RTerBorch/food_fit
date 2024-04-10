@@ -9,8 +9,10 @@ import com.robintb.food_fit.models.User;
 import com.robintb.food_fit.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -24,7 +26,19 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
+
+    public UserDTO login(CredentialsDTO credentialsDTO) {
+        User user = userRepository.findByUsername(credentialsDTO.getUsername())
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+
+        if(passwordEncoder.matches(CharBuffer.wrap(credentialsDTO.getPassword()), user.getPassword())) {
+            return userMapper.toUserDTO(user);
+        }
+
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+    }
 
     public User register(SignUpDTO signUpDTO) {
         Optional<User> optionalUser = userRepository.findByUsername(signUpDTO.getUsername());
@@ -43,7 +57,7 @@ public class UserService {
             throw new AppException("Error mapping SignUpDTO to User", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        newUser.setPassword(signUpDTO.getPassword()); // TODO: NEEDS ENCRYPTION!!
+        newUser.setPassword(String.valueOf(signUpDTO.getPassword())); // TODO: NEEDS ENCRYPTION!!
 
         return userRepository.save(newUser);
     }
@@ -65,8 +79,8 @@ public class UserService {
 
         boolean changesFound = false;
 
-        if (!Arrays.equals(userToLoginCredentials.getPassword(),credentialsDTO.getPassword())) {
-            userToLoginCredentials.setPassword(credentialsDTO.getPassword());
+        if (!Arrays.equals(userToLoginCredentials.getPassword().toCharArray(), credentialsDTO.getPassword())) {
+            userToLoginCredentials.setPassword(String.valueOf(credentialsDTO.getPassword()));
             changesFound = true;
         }
         if (!userToLoginCredentials.getUsername().equals(credentialsDTO.getUsername())) {
@@ -74,7 +88,7 @@ public class UserService {
             changesFound = true;
         }
 
-        if (changesFound){
+        if (changesFound) {
             userRepository.save(userToLoginCredentials);
         }
 
@@ -100,8 +114,13 @@ public class UserService {
             changesFound = true;
         }
 
-        if (changesFound){
-          userRepository.save(userToModify);
+        if (!userToModify.getUsername().equals(userDTO.getUsername())) {
+            userToModify.setUsername(userDTO.getUsername());
+            changesFound = true;
+        }
+
+        if (changesFound) {
+            userRepository.save(userToModify);
         }
 
     }

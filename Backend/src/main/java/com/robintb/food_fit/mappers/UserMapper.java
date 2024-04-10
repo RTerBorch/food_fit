@@ -1,6 +1,7 @@
 package com.robintb.food_fit.mappers;
 
 import com.robintb.food_fit.dtos.personDTO.SignUpDTO;
+import com.robintb.food_fit.dtos.personDTO.UserDTO;
 import com.robintb.food_fit.models.User;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,15 @@ public class UserMapper {
                 .firstName(signUpDTO.getFirstName())
                 .lastName(signUpDTO.getLastName())
                 .email(signUpDTO.getEmail())
+                .build();
+    }
+
+    public UserDTO toUserDTO(User user) {
+        return UserDTO.builder()
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
                 .build();
     }
 }
