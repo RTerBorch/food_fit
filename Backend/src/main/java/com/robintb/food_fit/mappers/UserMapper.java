@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public static User signUpToUser(SignUpDTO signUpDTO) {
+    public User signUpToUser(SignUpDTO signUpDTO) {
         return User.builder()
                 .username(signUpDTO.getUsername())
                 .firstName(signUpDTO.getFirstName())

@@ -3,6 +3,7 @@ package com.robintb.food_fit.services;
 import com.robintb.food_fit.dtos.personDTO.CredentialsDTO;
 import com.robintb.food_fit.dtos.personDTO.SignUpDTO;
 import com.robintb.food_fit.dtos.personDTO.UserDTO;
+import com.robintb.food_fit.exceptions.AppException;
 import com.robintb.food_fit.mappers.UserMapper;
 import com.robintb.food_fit.models.User;
 import com.robintb.food_fit.repositories.UserRepository;
@@ -11,11 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -28,8 +31,54 @@ public class UserServiceTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserService userService;
+
+    @Test
+    public void testFindByLogin() {
+        String username = "testUser";
+        User user = new User(username, "Test firstname", "Test lastname", "password123", "test@example.com");
+        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getUsername());
+
+        // Mocking the UserRepository and UserMapper
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(userMapper.toUserDTO(user)).thenReturn(userDTO);
+
+        // Call the service method
+        UserDTO foundUser = userService.findByLogin(username);
+
+        // Assertions
+        assertNotNull(foundUser);
+        assertEquals(userDTO.getId(), foundUser.getId());
+        assertEquals(userDTO.getUsername(), foundUser.getUsername());
+        assertEquals(userDTO.getFirstName(), foundUser.getFirstName());
+        assertEquals(userDTO.getLastName(), foundUser.getLastName());
+        assertEquals(userDTO.getEmail(), foundUser.getEmail());
+
+        // Verify interactions
+        verify(userRepository, times(1)).findByUsername(username);
+        verify(userMapper, times(1)).toUserDTO(user);
+    }
+
+    @Test
+    public void testFindByLogin_UserNotFound() {
+        String username = "unknownUser";
+
+        // Mocking the UserRepository to return empty
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        // Call the service method and assert the exception
+        AppException exception = assertThrows(AppException.class, () -> userService.findByLogin(username));
+        assertEquals("Unknown user", exception.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+
+        // Verify interactions
+        verify(userRepository, times(1)).findByUsername(username);
+        verify(userMapper, never()).toUserDTO(any());
+    }
 
     @Test
     public void testAddPerson() {
@@ -37,19 +86,31 @@ public class UserServiceTest {
         String firstName = "Test firstname";
         String lastName = "Test lastname";
         String password = "password123";
+        String encodedPassword = "encodedPassword123";
         String email = "test@example.com";
 
         SignUpDTO userToAdd = new SignUpDTO(firstName, lastName, username, password.toCharArray(), email);
+        User newUser = new User(username, firstName, lastName, encodedPassword, email);
+        UserDTO userDTO = new UserDTO(newUser.getId(), firstName, lastName, email, username);
 
-        User newUser = new User(username, firstName, lastName, password, email);
 
+        when(userMapper.signUpToUser(userToAdd)).thenReturn(newUser);
+        when(userMapper.toUserDTO(newUser)).thenReturn(userDTO);
+
+        when(passwordEncoder.encode(any(CharBuffer.class))).thenReturn(encodedPassword);
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(newUser);
 
-        User registeredUser = userService.register(userToAdd);
-        verify(userRepository, times(1)).save(newUser);
+        UserDTO registeredUser = userService.register(userToAdd);
+
         assertNotNull(registeredUser);
-        assertEquals(newUser, registeredUser);
+        assertEquals(userDTO.getId(), registeredUser.getId());
+        assertEquals(userDTO.getUsername(), registeredUser.getUsername());
+        assertEquals(userDTO.getLastName(), registeredUser.getLastName());
+        assertEquals(userDTO.getFirstName(), registeredUser.getFirstName());
+        assertEquals(userDTO.getEmail(), registeredUser.getEmail());
+        verify(passwordEncoder).encode(CharBuffer.wrap(password.toCharArray()));
+        verify(userRepository, times(1)).save(newUser);
     }
 
 
