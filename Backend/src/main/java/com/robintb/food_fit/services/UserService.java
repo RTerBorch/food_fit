@@ -28,7 +28,13 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    public UserDTO findByLogin(String username){
 
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+
+        return userMapper.toUserDTO(user);
+    }
     public UserDTO login(CredentialsDTO credentialsDTO) {
         User user = userRepository.findByUsername(credentialsDTO.getUsername())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
@@ -40,27 +46,26 @@ public class UserService {
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
-    public User register(SignUpDTO signUpDTO) {
+    public UserDTO register(SignUpDTO signUpDTO) {
         Optional<User> optionalUser = userRepository.findByUsername(signUpDTO.getUsername());
 
         if (optionalUser.isPresent()) {
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
 
-
-        System.out.println("Before mapping: " + signUpDTO);
-
         User newUser = userMapper.signUpToUser(signUpDTO);
-        System.out.println("After mapping: " + newUser);
 
         if (newUser == null) {
             throw new AppException("Error mapping SignUpDTO to User", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        newUser.setPassword(String.valueOf(signUpDTO.getPassword())); // TODO: NEEDS ENCRYPTION!!
+        newUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDTO.getPassword())));
 
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+
+        return userMapper.toUserDTO(newUser);
     }
+
 
 
     public void deleteUser(Long personId) {
