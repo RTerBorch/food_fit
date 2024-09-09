@@ -3,6 +3,7 @@ import logo from "../logo.svg";
 
 import Header from "./Header.js";
 import AppContent from "./AppContent.js";
+import RecipePage from "./recipeContent/RecipePage.js";
 
 function App() {
   return (
@@ -10,13 +11,9 @@ function App() {
       <Header pageTitle="Frontend authenticated with JWT" logoSrc={logo} />
       <div className="container-fluid">
         <div className="row">
-          <div className="col">
-            <AppContent />
-            <div className="row">
-              <div className="col 2">
-                <p>HEHEHEH</p>
-              </div>{" "}
-            </div>
+          <div className="col">{/*  <AppContent /> */}</div>
+          <div>
+            <RecipePage></RecipePage>
           </div>
         </div>
       </div>
