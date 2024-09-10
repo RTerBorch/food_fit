@@ -6,6 +6,12 @@ import { Button } from "@mui/material";
 
 export default function RecipePage() {
   const [showRecipeActive, setShowRecipeActive] = useState(false);
+  const [activeRecipe, setActiveRecipe] = useState(null);
+
+  function showRecipe(recipe) {
+    setActiveRecipe([recipe]);
+    setShowRecipeActive(true);
+  }
 
   return (
     <div>
@@ -27,10 +33,12 @@ export default function RecipePage() {
                 flexDirection: "column",
                 flexGrow: 1,
               }}
-              handleActiveTable={setShowRecipeActive}
+              handleActiveTable={setShowRecipeActive} // TODO TA BORT
+              onShowRecipe={showRecipe}
             />
           ) : (
             <RecipeTable
+              onActiveRecipe={activeRecipe}
               sx={{
                 minHeight: 400,
                 padding: 2,
