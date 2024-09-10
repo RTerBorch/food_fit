@@ -21,7 +21,7 @@ import java.util.Date;
 @Component
 public class UserAuthenticationProvider {
 
-    @Value("${security.jwt.token.secret-key:secret-value")
+    @Value("${security.jwt.token.secret-key:secret-value}")
     private String secretKey;
 
     private final UserService userService;
