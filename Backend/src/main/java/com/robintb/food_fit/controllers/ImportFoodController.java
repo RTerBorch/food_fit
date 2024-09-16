@@ -1,7 +1,6 @@
 package com.robintb.food_fit.controllers;
 
-import com.robintb.food_fit.repositories.ImportFoodRepository;
-import com.robintb.food_fit.services.ImportFoodService;
+import com.robintb.food_fit.services.FoodItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class ImportFoodController {
 
     @Autowired
-    private ImportFoodService importFoodService;
-
-    @Autowired
-    private ImportFoodRepository importFoodRepository;
+    private FoodItemService foodItemService;
 
     @GetMapping("/test")
     public String testingApi(){
@@ -24,7 +20,7 @@ public class ImportFoodController {
     @PostMapping("/collect-food-data")
     @ResponseBody
     public String collectFoodData(@RequestParam int foodLimit){
-        importFoodService.collectFoodData(foodLimit);
+        foodItemService.collectFoodData(foodLimit);
         return "Collected food data."; // TODO add error message and response message
     }
 }

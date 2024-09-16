@@ -1,7 +1,7 @@
 package com.robintb.food_fit.config;
 
 
-import com.robintb.food_fit.dtos.personDTO.ErrorDTO;
+import com.robintb.food_fit.dtos.personDTOs.ErrorDTO;
 import com.robintb.food_fit.exceptions.AppException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

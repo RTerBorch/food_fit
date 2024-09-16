@@ -1,4 +1,4 @@
-package com.robintb.food_fit.dtos.personDTO;
+package com.robintb.food_fit.dtos.personDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

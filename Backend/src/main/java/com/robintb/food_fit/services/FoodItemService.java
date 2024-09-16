@@ -1,9 +1,10 @@
 package com.robintb.food_fit.services;
 
 
+import com.robintb.food_fit.enums.foodEnums.NutrientType;
 import com.robintb.food_fit.models.FoodItem;
 import com.robintb.food_fit.models.Nutrient;
-import com.robintb.food_fit.repositories.ImportFoodRepository;
+import com.robintb.food_fit.repositories.FoodItemRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,25 +16,15 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class ImportFoodService {
+public class FoodItemService {
 
     @Autowired
-    private ImportFoodRepository importFoodRepository;
+    private FoodItemRepository foodItemRepository;
 
     private final String baseUrl = "https://dataportal.livsmedelsverket.se/livsmedel";
-    private static final HashSet<String> NUTRIENTS_OF_INTEREST = new HashSet<>();
-
-    static {
-        NUTRIENTS_OF_INTEREST.add("Energy (kcal)");
-        NUTRIENTS_OF_INTEREST.add("Fat, total");
-        NUTRIENTS_OF_INTEREST.add("Protein");
-        NUTRIENTS_OF_INTEREST.add("Carbohydrates, available");
-    }
-
 
     public void collectFoodData(int foodLimit) {
 
@@ -78,8 +69,8 @@ public class ImportFoodService {
             for (Object nutrientItem : nutrientJSONArray){
                 JSONObject nutrientJSONObject = (JSONObject) nutrientItem;
 
-                if (NUTRIENTS_OF_INTEREST.contains(nutrientJSONObject.get("namn"))){
-
+                String nutrientName = nutrientJSONObject.get("namn").toString();
+                if (NutrientType.getNutrientMap().containsKey(nutrientName)){
 
                     foodItemNutrients.add(new Nutrient(
                             nutrientJSONObject.get("namn").toString(),
@@ -91,12 +82,7 @@ public class ImportFoodService {
                     }
                 }
             System.out.println(foodItemNutrients.size() + " Size");
-         //   FoodItem foodItem = new FoodItem(foodItemId, foodItemName,version,foodItemNutrients);
-          //  foodItems.add(foodItem);
-
             updateFoodItemIfNewer(foodItemId, foodItemName,version,foodItemNutrients);
-           // importFoodRepository.save(foodItem);
-           // importFoodRepository.
         }
     }
 
@@ -152,7 +138,7 @@ public class ImportFoodService {
     public void updateFoodItemIfNewer(Long foodItemId, String foodItemName, LocalDateTime newVersion, List<Nutrient> foodItemNutrients) {
 
         // Check if the food item already exists in the database
-        Optional<FoodItem> optionalFoodItem = importFoodRepository.findById(foodItemId);
+        Optional<FoodItem> optionalFoodItem = foodItemRepository.findById(foodItemId);
 
         if (optionalFoodItem.isPresent()) {
             FoodItem existingFoodItem = optionalFoodItem.get();
@@ -165,7 +151,7 @@ public class ImportFoodService {
                 existingFoodItem.setNutrientList(foodItemNutrients);
 
                 // Save the updated food item
-                importFoodRepository.save(existingFoodItem);
+                foodItemRepository.save(existingFoodItem);
             } else {
                 // The existing version is the same or newer, no update required
                 System.out.println("The existing food item version is up to date.");
@@ -173,7 +159,7 @@ public class ImportFoodService {
         } else {
             // If the food item doesn't exist, create a new one
             FoodItem newFoodItem = new FoodItem(foodItemId, foodItemName, newVersion, foodItemNutrients);
-            importFoodRepository.save(newFoodItem);
+            foodItemRepository.save(newFoodItem);
         }
     }
 

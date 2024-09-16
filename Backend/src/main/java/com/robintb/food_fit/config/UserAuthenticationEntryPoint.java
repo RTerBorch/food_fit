@@ -1,7 +1,7 @@
 package com.robintb.food_fit.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.robintb.food_fit.dtos.personDTO.ErrorDTO;
+import com.robintb.food_fit.dtos.personDTOs.ErrorDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

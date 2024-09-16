@@ -1,7 +1,7 @@
 package com.robintb.food_fit.mappers;
 
-import com.robintb.food_fit.dtos.personDTO.SignUpDTO;
-import com.robintb.food_fit.dtos.personDTO.UserDTO;
+import com.robintb.food_fit.dtos.personDTOs.SignUpDTO;
+import com.robintb.food_fit.dtos.personDTOs.UserDTO;
 import com.robintb.food_fit.models.User;
 import org.springframework.stereotype.Component;
 

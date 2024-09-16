@@ -1,8 +1,7 @@
-package com.robintb.food_fit.dtos.personDTO;
+package com.robintb.food_fit.dtos.personDTOs;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
