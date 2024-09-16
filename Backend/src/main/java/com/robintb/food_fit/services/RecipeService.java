@@ -22,7 +22,7 @@ public class RecipeService {
     private RecipeRepository recipeRepository;
 
     public Recipe createRecipe(String name, List<Long> ingredientIds) {
-        return recipeRepository.save(new Recipe(name, foodItemRepository.findAllByIds(ingredientIds)));
+        return recipeRepository.save(new Recipe(name, foodItemRepository.findAllById(ingredientIds)));
     }
 
     public List<RecipeDTO> returnAllRecipesAsDTO() {
