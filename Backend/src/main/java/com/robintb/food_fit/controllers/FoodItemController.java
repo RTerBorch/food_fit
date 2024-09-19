@@ -33,7 +33,7 @@ public class FoodItemController {
     @PostMapping("/get-foot-items-by-search")
     @ResponseBody
     public ResponseEntity<?> getFoodItemsBySearch(@RequestParam String keyword) {
-
+    // TODO add language choice
         try {
             List<FoodItem> foodItems = foodItemService.searchFoodItems(keyword);
             return new ResponseEntity<>(foodItems, HttpStatus.CREATED);

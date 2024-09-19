@@ -13,4 +13,15 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
 
     @Query("SELECT f FROM FoodItem f WHERE LOWER(f.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<FoodItem> searchByName(@Param("keyword") String keyword);
+
+    // Scoring system to give better search results.
+    @Query("SELECT f FROM FoodItem f " +
+            "WHERE LOWER(f.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "ORDER BY " +
+            "CASE " +
+            "WHEN LOWER(f.name) = LOWER(:keyword) THEN 3 " +
+            "WHEN LOWER(f.name) LIKE LOWER(CONCAT(:keyword, '%')) THEN 2 " +
+            "WHEN LOWER(f.name) LIKE LOWER(CONCAT('%', :keyword, '%')) THEN 1 " +
+            "ELSE 0 END DESC")  // Sort in descending order of the score
+    List<FoodItem> searchByNameWithRelevance(@Param("keyword") String keyword);
 }

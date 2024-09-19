@@ -164,7 +164,7 @@ public class FoodItemService {
     }
 
     public List<FoodItem> searchFoodItems(String keyword){
-        return foodItemRepository.searchByName(keyword);
+        return foodItemRepository.searchByNameWithRelevance(keyword);
     }
 
 }
