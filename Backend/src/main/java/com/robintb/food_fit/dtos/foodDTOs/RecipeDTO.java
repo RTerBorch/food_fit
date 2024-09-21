@@ -22,7 +22,7 @@ public class RecipeDTO {
     private List<FoodItem> ingredients;
 
     public RecipeDTO(Long id, String name, LocalDateTime created, double caloriesInRecipe, double fatInRecipe,
-                     double proteinInRecipe, double carbsInRecipe, List<FoodItem> ingredients) {
+                     double proteinInRecipe, double carbsInRecipe,List<FoodItem> ingredients) {
         this.id = id;
         this.name = name;
         this.created = created;

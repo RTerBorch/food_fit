@@ -18,16 +18,18 @@ public class FoodItemController {
     @Autowired
     private FoodItemService foodItemService;
 
-    @GetMapping("/test")
-    public String testingApi(){
-        return "TESTING WORKED";
-    }
-
     @PostMapping("/collect-food-data")
     @ResponseBody
-    public String collectFoodData(@RequestParam int foodLimit){
-        foodItemService.collectFoodData(foodLimit);
-        return "Collected food data."; // TODO add error message and response message
+    public ResponseEntity<?> collectFoodData(@RequestParam int foodLimit){
+
+        try {
+            foodItemService.collectFoodData(foodLimit);
+            return new ResponseEntity<>("Collected food data.", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/get-foot-items-by-search")
