@@ -1,5 +1,5 @@
 import RecipeList from "./RecipeList";
-import RecipeTable from "./RecipeTable";
+import RecipeContent from "./RecipeContent";
 import Grid from "@mui/material/Grid2"; // Correct import for Grid2
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
@@ -9,7 +9,9 @@ export default function RecipePage() {
   const [activeRecipe, setActiveRecipe] = useState(null);
 
   function showRecipe(recipe) {
-    setActiveRecipe([recipe]);
+    console.log("recipe log:", recipe);
+    console.log("ingredients: ", recipe.ingredients);
+    setActiveRecipe(recipe.ingredients);
     setShowRecipeActive(true);
   }
 
@@ -37,7 +39,7 @@ export default function RecipePage() {
               onShowRecipe={showRecipe}
             />
           ) : (
-            <RecipeTable
+            <RecipeContent
               onActiveRecipe={activeRecipe}
               sx={{
                 minHeight: 400,

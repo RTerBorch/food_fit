@@ -1,5 +1,5 @@
 import * as React from "react";
-import { request } from "../helpers/axios_helper";
+import { request, getAllRecipes } from "../helpers/axios_helper";
 
 export default class AuthContent extends React.Component {
   constructor(props) {
@@ -30,7 +30,9 @@ export default class AuthContent extends React.Component {
               <p className="card-text">Content:</p>
               <ul>
                 {this.state.data &&
-                  this.state.data.map((line) => <li key={line}>{line}</li>)}
+                  this.state.data.map((recipe) => (
+                    <li key={recipe.id}>{recipe.name}</li>
+                  ))}
               </ul>
             </div>
           </div>

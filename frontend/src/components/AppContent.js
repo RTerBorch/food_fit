@@ -6,6 +6,7 @@ import Buttons from "./Buttons";
 import AuthContent from "./AuthContent";
 import LoginForm from "./LoginForm";
 import WelcomeContent from "./WelcomeContent";
+import RecipePage from "../components/recipeContent/RecipePage";
 
 export default class AppContent extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export default class AppContent extends React.Component {
     })
       .then((response) => {
         setAuthHeader(response.data.token);
-        this.setState({ componentToShow: "messages" });
+        this.setState({ componentToShow: "dashboard" });
       })
       .catch((error) => {
         setAuthHeader(null);
@@ -61,7 +62,7 @@ export default class AppContent extends React.Component {
     })
       .then((response) => {
         setAuthHeader(response.data.token);
-        this.setState({ componentToShow: "messages" });
+        this.setState({ componentToShow: "dashboard" });
       })
       .catch((error) => {
         setAuthHeader(null);
@@ -78,7 +79,8 @@ export default class AppContent extends React.Component {
         {this.state.componentToShow === "login" && (
           <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />
         )}
-        {this.state.componentToShow === "messages" && <AuthContent />}
+        {this.state.componentToShow === "dashboard" && <RecipePage />}
+        {/* {this.state.componentToShow === "messages" && <AuthContent />} */}
       </>
     );
   }
