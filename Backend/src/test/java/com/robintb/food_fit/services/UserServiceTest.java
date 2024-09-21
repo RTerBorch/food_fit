@@ -1,8 +1,8 @@
 package com.robintb.food_fit.services;
 
-import com.robintb.food_fit.dtos.personDTO.CredentialsDTO;
-import com.robintb.food_fit.dtos.personDTO.SignUpDTO;
-import com.robintb.food_fit.dtos.personDTO.UserDTO;
+import com.robintb.food_fit.dtos.personDTOs.CredentialsDTO;
+import com.robintb.food_fit.dtos.personDTOs.SignUpDTO;
+import com.robintb.food_fit.dtos.personDTOs.UserDTO;
 import com.robintb.food_fit.exceptions.AppException;
 import com.robintb.food_fit.mappers.UserMapper;
 import com.robintb.food_fit.models.User;

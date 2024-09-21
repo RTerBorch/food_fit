@@ -1,27 +1,28 @@
-package com.robintb.food_fit.dtos.personDTO;
+package com.robintb.food_fit.dtos.personDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
-public class SignUpDTO {
+public class UserDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private String username;
-    private char[] password;
     private String email;
+    private String username;
+    private String token;
 
-    public SignUpDTO(String firstName, String lastName, String username, char[] password, String email) {
+    public UserDTO(Long id, String firstName, String lastName, String email, String username) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
-        this.password = password;
         this.email = email;
+        this.username = username;
     }
 }
+
