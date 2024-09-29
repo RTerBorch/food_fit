@@ -1,61 +1,43 @@
+import * as React from "react";
 import Box from "@mui/material/Box";
-import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import TablePagination from "@mui/material/TablePagination";
+import EnhancedTable from "./RecipeContentHelper/EnhancedTable";
 
-export default function DataTable({ onActiveRecipe }) {
-  const [rows, setRows] = useState([]);
+export default function RecipeContent({ onActiveRecipe }) {
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = React.useState(0);
 
-  const extractNutrient = (nutrientList, nutrientName) => {
-    const nutrient = nutrientList.find((n) => n.name === nutrientName);
-    return nutrient ? nutrient.value : 0; // Default to 0 if not found
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
   };
 
-  useEffect(() => {
-    if (onActiveRecipe) {
-      const formattedRows = onActiveRecipe.map((recipe) => {
-        const calories = extractNutrient(recipe.nutrientList, "Energy (kcal)");
-        const protein = extractNutrient(recipe.nutrientList, "Protein");
-        const carbs = extractNutrient(
-          recipe.nutrientList,
-          "Carbohydrates, available"
-        );
-        const fat = extractNutrient(recipe.nutrientList, "Fat, total");
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-        return {
-          id: recipe.id,
-          name: recipe.name,
-          calories: calories,
-          protein: protein,
-          carbs: carbs,
-          fat: fat,
-        };
-      });
-
-      setRows(formattedRows);
-    }
-  }, [onActiveRecipe]);
-
-  const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: "Name", width: 130 },
-    { field: "calories", headerName: "Calories", type: "number", width: 70 },
-    { field: "protein", headerName: "Protein", type: "number", width: 70 },
-    { field: "carbs", headerName: "Carbohydrates", type: "number", width: 70 },
-    { field: "fat", headerName: "Fat", type: "number", width: 70 },
-  ];
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page
+  };
 
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          checkboxSelection
-          sx={{ border: 0 }}
-        />
-      </Box>
-    </Paper>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <EnhancedTable onActiveRecipe={onActiveRecipe} dense={dense} />
+      </Paper>
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
+      >
+        <AddIcon />
+      </Fab>
+    </Box>
   );
 }

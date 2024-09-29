@@ -1,8 +1,8 @@
 package com.robintb.food_fit.services;
 
-
 import com.robintb.food_fit.dtos.foodDTOs.RecipeDTO;
 import com.robintb.food_fit.enums.foodEnums.NutrientType;
+import com.robintb.food_fit.models.FoodItem;
 import com.robintb.food_fit.models.Recipe;
 import com.robintb.food_fit.repositories.FoodItemRepository;
 import com.robintb.food_fit.repositories.RecipeRepository;
@@ -44,5 +44,22 @@ public class RecipeService {
         return recipeDTOS;
     }
 
+    public Recipe editRecipe(Long id, String name, List<Long> ingredients) throws IllegalArgumentException {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
 
+        recipe.setName(name);
+
+        List<FoodItem> foodItems = foodItemRepository.findAllById(ingredients);
+        recipe.setIngredients(foodItems);
+
+        return recipeRepository.save(recipe);
+    }
+
+    public void deleteRecipe(Long id) throws IllegalArgumentException {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
+
+        recipeRepository.delete(recipe);
+    }
 }

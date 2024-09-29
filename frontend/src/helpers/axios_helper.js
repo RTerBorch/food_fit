@@ -29,10 +29,28 @@ export const request = (method, url, data) => {
   });
 };
 
-export const getAllRecipes = () => request("GET", "/recipe/show-all-recipes");
+export const getAllRecipes = () => request("GET", "/recipes"); // Updated URL to be consistent
 
-export const createNewRecipe = (name, ingredients) =>
-  request("POST", `/recipe/create-new-recipe?name=${name}`, ingredients);
+// Create a new recipe with name and ingredients
+export const createNewRecipe = (name, ingredients) => {
+  const params = new URLSearchParams({ name });
+  return request("POST", `/recipes?${params.toString()}`, ingredients);
+};
 
-export const searchFoodItems = (keyword) =>
-  request("POST", `/food-import/get-foot-items-by-search?keyword=${keyword}`);
+// Edit an existing recipe by ID
+export const editRecipe = (id, name, ingredients) => {
+  const params = new URLSearchParams({ name });
+  return request("PUT", `/recipes/${id}?${params.toString()}`, ingredients);
+};
+
+// Delete a recipe by ID
+export const deleteRecipe = (id) => request("DELETE", `/recipes/${id}`);
+
+// Search food items by keyword
+export const searchFoodItems = (keyword) => {
+  const params = new URLSearchParams({ keyword });
+  return request(
+    "POST",
+    `/food-import/get-food-items-by-search?${params.toString()}`
+  );
+};
