@@ -7,6 +7,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import TablePagination from "@mui/material/TablePagination";
 import EnhancedTable from "./RecipeContentHelper/EnhancedTable";
+import { editRecipe } from "../../helpers/axios_helper";
 
 export default function RecipeContent({ onActiveRecipe }) {
   const [dense, setDense] = React.useState(false);
@@ -26,18 +27,26 @@ export default function RecipeContent({ onActiveRecipe }) {
     setPage(0); // Reset to the first page
   };
 
+  function onEditRecipe(id, name, ingredients) {
+    editRecipe(id, name, ingredients)
+      .then((response) => {
+        console.log("Recipe updated:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating recipe:", error);
+      });
+  }
+
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTable onActiveRecipe={onActiveRecipe} dense={dense} />
-      </Paper>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: 16, right: 16 }}
-      >
-        <AddIcon />
-      </Fab>
-    </Box>
+    <>
+      <button onClick={() => onEditRecipe(1, "New Recipe Name", [1, 102, 103])}>
+        Test add ingredient change later
+      </button>
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTable onActiveRecipe={onActiveRecipe} dense={dense} />
+        </Paper>
+      </Box>
+    </>
   );
 }
