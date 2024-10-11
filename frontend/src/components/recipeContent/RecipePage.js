@@ -9,9 +9,9 @@ export default function RecipePage() {
   const [activeRecipe, setActiveRecipe] = useState(null);
 
   function showRecipe(recipe) {
-    console.log("recipe log:", recipe);
-    console.log("ingredients: ", recipe.ingredients);
-    setActiveRecipe(recipe.ingredients);
+    console.log("active recipe log:", recipe);
+    console.log("active ingredients: ", recipe.ingredients);
+    setActiveRecipe(recipe);
     setShowRecipeActive(true);
   }
 

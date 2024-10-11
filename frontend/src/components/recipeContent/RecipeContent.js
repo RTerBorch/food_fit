@@ -38,15 +38,14 @@ export default function RecipeContent({ onActiveRecipe }) {
   }
 
   return (
-    <>
-      <button onClick={() => onEditRecipe(1, "New Recipe Name", [1, 102, 103])}>
-        Test add ingredient change later
-      </button>
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTable onActiveRecipe={onActiveRecipe} dense={dense} />
-        </Paper>
-      </Box>
-    </>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
+        <EnhancedTable
+          onActiveRecipe={onActiveRecipe}
+          onEditRecipe={onEditRecipe}
+          dense={dense}
+        />
+      </Paper>
+    </Box>
   );
 }

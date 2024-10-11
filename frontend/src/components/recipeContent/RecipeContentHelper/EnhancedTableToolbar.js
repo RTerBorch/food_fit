@@ -10,8 +10,23 @@ import AddIcon from "@mui/icons-material/Add";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+export default function EnhancedTableToolbar({
+  numSelected,
+  onEditRecipe,
+  onActiveRecipe,
+}) {
+  function openNewIngredientsWindow() {
+    console.log("This shall open add ingredients window");
+    /* TODO Add MUI Dialoge, autocomplete, list  */
+  }
+
+  function editIngredientsInRecipe() {
+    onEditRecipe(
+      onActiveRecipe.id,
+      onActiveRecipe.name,
+      onActiveRecipe.ingredients
+    );
+  }
 
   return (
     <Toolbar
@@ -57,11 +72,9 @@ export default function EnhancedTableToolbar(props) {
         </Tooltip>
       ) : (
         <Tooltip title="Filter list1">
-          {/*  <IconButton color="success" aria-label="add"> */}
           <Fab size="small" color="primary">
-            <AddIcon></AddIcon>
+            <AddIcon onClick={() => openNewIngredientsWindow()}></AddIcon>
           </Fab>
-          {/* </IconButton> */}
         </Tooltip>
       )}
     </Toolbar>

@@ -18,7 +18,7 @@ import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import { extractNutrient, getComparator } from "./TableHelpers";
 
-export default function EnhancedTable({ onActiveRecipe }) {
+export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -26,8 +26,8 @@ export default function EnhancedTable({ onActiveRecipe }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const rows = onActiveRecipe
-    ? onActiveRecipe.map((recipe) => ({
+  const rows = onActiveRecipe.ingredients
+    ? onActiveRecipe.ingredients.map((recipe) => ({
         id: recipe.id,
         name: recipe.name,
         calories: extractNutrient(recipe.nutrientList, "Energy (kcal)"),
@@ -80,6 +80,7 @@ export default function EnhancedTable({ onActiveRecipe }) {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
   const visibleRows = React.useMemo(
     () =>
       [...rows]
@@ -96,7 +97,11 @@ export default function EnhancedTable({ onActiveRecipe }) {
       />{" "}
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            onActiveRecipe={onActiveRecipe}
+            onEditRecipe={onEditRecipe}
+          />
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
