@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import { extractNutrient, getComparator } from "./TableHelpers";
+import IngredientContentDialog from "./IngredientContentDialog";
 
 export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
   const [order, setOrder] = React.useState("asc");
@@ -25,6 +26,15 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const rows = onActiveRecipe.ingredients
     ? onActiveRecipe.ingredients.map((recipe) => ({
@@ -91,6 +101,7 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
 
   return (
     <>
+      <IngredientContentDialog open={open} handleClose={handleClose} />
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -101,7 +112,8 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
             numSelected={selected.length}
             onActiveRecipe={onActiveRecipe}
             onEditRecipe={onEditRecipe}
-          />
+            openAddIngredientDialog={setOpen}
+          />{" "}
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}

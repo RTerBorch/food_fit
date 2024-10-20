@@ -14,10 +14,10 @@ export default function EnhancedTableToolbar({
   numSelected,
   onEditRecipe,
   onActiveRecipe,
+  openAddIngredientDialog,
 }) {
   function openNewIngredientsWindow() {
-    console.log("This shall open add ingredients window");
-    /* TODO Add MUI Dialoge, autocomplete, list  */
+    openAddIngredientDialog(true);
   }
 
   function editIngredientsInRecipe() {
@@ -71,7 +71,7 @@ export default function EnhancedTableToolbar({
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list1">
+        <Tooltip title="add ingredients">
           <Fab size="small" color="primary">
             <AddIcon onClick={() => openNewIngredientsWindow()}></AddIcon>
           </Fab>
