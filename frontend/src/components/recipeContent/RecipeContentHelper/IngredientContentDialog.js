@@ -16,15 +16,23 @@ import IconButton from "@mui/material/IconButton";
 import FolderIcon from "@mui/icons-material/Folder";
 import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
+import { searchFoodItems } from "../../../helpers/axios_helper";
 import _ from "lodash";
 
 export default function IngredientContentDialog({ open, handleClose }) {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [ingredientSearchResult, setIngredientSearchResult] = useState([]);
 
   const debouncedSearch = useCallback(
-    _.debounce((value) => {
+    _.debounce(async (value) => {
       console.log(`Triggering API call with search value: ${value}`);
-      // TODO API SEARCH CALL
+      try {
+        const result = await searchFoodItems(value);
+        console.log(result.data);
+        setIngredientSearchResult(result.data);
+      } catch (error) {
+        console.error("Error fetching ingredients:", error);
+      }
     }, 1000), // ms debounce time
     []
   );
@@ -37,7 +45,7 @@ export default function IngredientContentDialog({ open, handleClose }) {
 
   const handleInputChange = (event) => {
     const value = event.target.value;
-    setSearchValue(value);
+    setSearchInput(value);
     if (open) {
       debouncedSearch(value);
     }
@@ -45,17 +53,8 @@ export default function IngredientContentDialog({ open, handleClose }) {
 
   function onCancel() {
     handleClose();
-    setSearchValue("");
+    setSearchInput("");
   }
-
-  // Demo objects for the list
-  const demoItems = [
-    { id: 1, primary: "Flour", secondary: "500g" },
-    { id: 2, primary: "Sugar", secondary: "200g" },
-    { id: 3, primary: "Butter", secondary: "100g" },
-    { id: 4, primary: "Eggs", secondary: "2 large" },
-    { id: 5, primary: "Milk", secondary: "1 cup" },
-  ];
 
   return (
     <React.Fragment>
@@ -86,7 +85,7 @@ export default function IngredientContentDialog({ open, handleClose }) {
             type="text"
             fullWidth
             variant="standard"
-            value={searchValue}
+            value={searchInput}
             onChange={handleInputChange}
           />
 
@@ -94,11 +93,15 @@ export default function IngredientContentDialog({ open, handleClose }) {
             Ingredients List
           </Typography>
           <List dense>
-            {demoItems.map((item) => (
+            {ingredientSearchResult.map((item) => (
               <ListItem
                 key={item.id}
                 secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => console.log("Click")}
+                  >
                     <AddIcon />
                   </IconButton>
                 }
@@ -109,8 +112,20 @@ export default function IngredientContentDialog({ open, handleClose }) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={item.primary}
-                  secondary={item.secondary}
+                  primary={item.name}
+                  secondary={
+                    <>
+                      <Typography variant="body2" color="textSecondary">
+                        {`${item.nutrientList[0].name}: ${item.nutrientList[0].value} ${item.nutrientList[0].enhet} (per 100g)`}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {`${item.nutrientList[1].name}: ${item.nutrientList[1].value} ${item.nutrientList[1].enhet} (per 100g)`}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {`${item.nutrientList[2].name}: ${item.nutrientList[2].value} ${item.nutrientList[2].enhet} (per 100g)`}
+                      </Typography>
+                    </>
+                  }
                 />
               </ListItem>
             ))}

@@ -32,7 +32,7 @@ public class FoodItemController {
         }
     }
 
-    @PostMapping("/get-foot-items-by-search")
+    @PostMapping("/get-food-items-by-search")
     @ResponseBody
     public ResponseEntity<?> getFoodItemsBySearch(@RequestParam String keyword) {
     // TODO add language choice
