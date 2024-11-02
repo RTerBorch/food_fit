@@ -12,20 +12,10 @@ import EditIcon from "@mui/icons-material/Edit";
 
 export default function EnhancedTableToolbar({
   numSelected,
-  onEditRecipe,
-  onActiveRecipe,
   openAddIngredientDialog,
 }) {
   function openNewIngredientsWindow() {
     openAddIngredientDialog(true);
-  }
-
-  function editIngredientsInRecipe() {
-    onEditRecipe(
-      onActiveRecipe.id,
-      onActiveRecipe.name,
-      onActiveRecipe.ingredients
-    );
   }
 
   return (
@@ -66,7 +56,7 @@ export default function EnhancedTableToolbar({
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={() => console.log("CLICK")}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

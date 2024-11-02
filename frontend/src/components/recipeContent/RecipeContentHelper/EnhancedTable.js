@@ -99,9 +99,31 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
     [order, orderBy, page, rowsPerPage, rows]
   );
 
+  function addIngredientToRecipe(newIngredient) {
+    console.log("List of ingredients ", [
+      ...onActiveRecipe.ingredients,
+      newIngredient,
+    ]);
+    const listOfID = onActiveRecipe.ingredients.map(
+      (ingredient) => ingredient.id
+    );
+
+    console.log("List of ids ", [...listOfID, newIngredient.id]);
+    onEditRecipe(onActiveRecipe.id, onActiveRecipe.name, [
+      ...listOfID,
+      newIngredient.id,
+    ]);
+  }
+
   return (
     <>
-      <IngredientContentDialog open={open} handleClose={handleClose} />
+      <IngredientContentDialog
+        open={open}
+        handleClose={handleClose}
+        onActiveRecipe={onActiveRecipe}
+        onEditRecipe={onEditRecipe}
+        onAddIngredientToRecipe={addIngredientToRecipe}
+      />
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -110,8 +132,6 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar
             numSelected={selected.length}
-            onActiveRecipe={onActiveRecipe}
-            onEditRecipe={onEditRecipe}
             openAddIngredientDialog={setOpen}
           />{" "}
           <TableContainer>

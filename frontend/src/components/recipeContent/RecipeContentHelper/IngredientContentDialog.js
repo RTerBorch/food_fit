@@ -19,7 +19,11 @@ import Typography from "@mui/material/Typography";
 import { searchFoodItems } from "../../../helpers/axios_helper";
 import _ from "lodash";
 
-export default function IngredientContentDialog({ open, handleClose }) {
+export default function IngredientContentDialog({
+  open,
+  handleClose,
+  onAddIngredientToRecipe,
+}) {
   const [searchInput, setSearchInput] = useState("");
   const [ingredientSearchResult, setIngredientSearchResult] = useState([]);
 
@@ -100,7 +104,7 @@ export default function IngredientContentDialog({ open, handleClose }) {
                   <IconButton
                     edge="end"
                     aria-label="delete"
-                    onClick={() => console.log("Click")}
+                    onClick={() => onAddIngredientToRecipe(item)}
                   >
                     <AddIcon />
                   </IconButton>
