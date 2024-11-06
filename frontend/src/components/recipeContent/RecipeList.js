@@ -71,7 +71,12 @@ export default function RecipeList({ onShowRecipe }) {
   return (
     <Paper sx={{ height: 400, width: "100%" }}>
       <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid onRowClick={handleRowClick} rows={rows} columns={columns} />
+        <DataGrid
+          onRowClick={handleRowClick}
+          rows={rows}
+          columns={columns}
+          checkboxSelection
+        />
       </Box>
     </Paper>
   );

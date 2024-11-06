@@ -115,13 +115,23 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
     ]);
   }
 
+  function removeItemFromRecipe() {
+    // removes "selected" ingredient ids
+    const updatedIngredientIds = onActiveRecipe.ingredients
+      .filter((ingredient) => !selected.includes(ingredient.id))
+      .map((ingredient) => ingredient.id);
+
+    console.log("ids:", updatedIngredientIds);
+
+    onEditRecipe(onActiveRecipe.id, onActiveRecipe.name, updatedIngredientIds);
+  }
+
   return (
     <>
       <IngredientContentDialog
         open={open}
         handleClose={handleClose}
         onActiveRecipe={onActiveRecipe}
-        onEditRecipe={onEditRecipe}
         onAddIngredientToRecipe={addIngredientToRecipe}
       />
       <FormControlLabel
@@ -133,6 +143,7 @@ export default function EnhancedTable({ onActiveRecipe, onEditRecipe }) {
           <EnhancedTableToolbar
             numSelected={selected.length}
             openAddIngredientDialog={setOpen}
+            onRemoveItemFromRecipe={removeItemFromRecipe}
           />{" "}
           <TableContainer>
             <Table

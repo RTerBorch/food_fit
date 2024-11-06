@@ -41,6 +41,7 @@ export default function RecipePage() {
           ) : (
             <RecipeContent
               onActiveRecipe={activeRecipe}
+              setActiveRecipe={setActiveRecipe}
               sx={{
                 minHeight: 400,
                 padding: 2,

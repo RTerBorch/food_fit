@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import EnhancedTable from "./RecipeContentHelper/EnhancedTable";
 import { editRecipe } from "../../helpers/axios_helper";
 
-export default function RecipeContent({ onActiveRecipe }) {
+export default function RecipeContent({ onActiveRecipe, setActiveRecipe }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
@@ -31,6 +31,7 @@ export default function RecipeContent({ onActiveRecipe }) {
     editRecipe(id, name, ingredients)
       .then((response) => {
         console.log("Recipe updated:", response.data);
+        setActiveRecipe(response.data);
       })
       .catch((error) => {
         console.error("Error updating recipe:", error);
